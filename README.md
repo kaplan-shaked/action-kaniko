@@ -1,3 +1,12 @@
+# Fork
+
+I've created this fork to expedite our CD process.
+The release of this fork pushes the image to ghcr.io registry.
+and the action entry point is from an image not a dockerfile.
+
+## Todo:
+1. support login into multiple registries
+
 # Kaniko image builder
 
 This Action uses the [kaniko](https://github.com/GoogleContainerTools/kaniko) executor instead of the docker daemon. Kaniko builds the image
