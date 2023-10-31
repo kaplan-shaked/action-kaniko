@@ -5,6 +5,7 @@ if [[ "$INPUT_DEBUG" == "true" ]]; then
 fi
 
 export REGISTRY=${INPUT_REGISTRY:-"docker.io"}
+export SECOND_REGISTRY=${INPUT_SECOND_REGISTRY}
 export IMAGE=${INPUT_IMAGE}
 export BRANCH=$(echo ${GITHUB_REF} | sed -E "s/refs\/(heads|tags)\///g" | sed -e "s/\//-/g")
 export TAG=${INPUT_TAG:-$([ "$BRANCH" == "master" ] && echo latest || echo $BRANCH)}
@@ -58,6 +59,7 @@ else
     fi
 fi
 
+
 export CACHE=${INPUT_CACHE:+"--cache=true"}
 export CACHE=$CACHE${INPUT_CACHE_TTL:+" --cache-ttl=$INPUT_CACHE_TTL"}
 export CACHE=$CACHE${INPUT_CACHE_REGISTRY:+" --cache-repo=$INPUT_CACHE_REGISTRY"}
@@ -83,6 +85,12 @@ cat <<EOF >/kaniko/.docker/config.json
         "https://${REGISTRY}": {
             "username": "${USERNAME}",
             "password": "${PASSWORD}"
+        }
+        ${SECOND_REGISTRY+,
+        "https://${SECOND_REGISTRY}": {
+            "username": "${USERNAME}",
+            "password": "${PASSWORD}"
+        }
         }
     }
 }
