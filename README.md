@@ -1,3 +1,12 @@
+# Fork
+
+I've created this fork to expedite our CD process.
+I've manually pushed the kaniko-action image into our ECR, so when running CD will start immediately and we won't need to build the image from scratch.
+
+## Todo:
+1. Add action to automatically release new versions (into ECR)
+2. support login into multiple registries
+
 # Kaniko image builder
 
 This Action uses the [kaniko](https://github.com/GoogleContainerTools/kaniko) executor instead of the docker daemon. Kaniko builds the image
