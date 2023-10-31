@@ -39,4 +39,5 @@ jobs:
           platforms: linux/arm64
           push: true                                      
           tags: ${{ steps.meta.outputs.tags }}
+          allow: "network.host"
 
