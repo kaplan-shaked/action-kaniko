@@ -5,6 +5,7 @@ if [[ "$INPUT_DEBUG" == "true" ]]; then
 fi
 
 export REGISTRY=${INPUT_REGISTRY:-"docker.io"}
+export SECOND_REGISTRY=${INPUT_SECOND_REGISTRY}
 export IMAGE=${INPUT_IMAGE}
 export BRANCH=$(echo ${GITHUB_REF} | sed -E "s/refs\/(heads|tags)\///g" | sed -e "s/\//-/g")
 export TAG=${INPUT_TAG:-$([ "$BRANCH" == "master" ] && echo latest || echo $BRANCH)}
@@ -58,6 +59,7 @@ else
     fi
 fi
 
+
 export CACHE=${INPUT_CACHE:+"--cache=true"}
 export CACHE=$CACHE${INPUT_CACHE_TTL:+" --cache-ttl=$INPUT_CACHE_TTL"}
 export CACHE=$CACHE${INPUT_CACHE_REGISTRY:+" --cache-repo=$INPUT_CACHE_REGISTRY"}
@@ -77,6 +79,22 @@ fi
 
 export ARGS="$CACHE $CONTEXT $DOCKERFILE $TARGET $DESTINATION $INPUT_EXTRA_ARGS"
 
+if [ ! -z "$SECOND_REGISTRY" ]; then
+cat <<EOF >/kaniko/.docker/config.json
+{
+    "auths": {
+        "https://${REGISTRY}": {
+            "username": "${USERNAME}",
+            "password": "${PASSWORD}"
+        },
+        "https://${SECOND_REGISTRY}": {
+            "username": "${USERNAME}",
+            "password": "${PASSWORD}"
+        }
+    }
+}
+EOF
+else 
 cat <<EOF >/kaniko/.docker/config.json
 {
     "auths": {
@@ -87,6 +105,7 @@ cat <<EOF >/kaniko/.docker/config.json
     }
 }
 EOF
+fi
 
 # https://github.com/GoogleContainerTools/kaniko/issues/1349
 /kaniko/executor --reproducible --force $ARGS

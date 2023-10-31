@@ -1,8 +1,10 @@
 FROM alpine as certs
 
-RUN apk --update add ca-certificates
+RUN   apk update \                                                                                                                                                                                                                        
+    &&   apk add ca-certificates wget \                                                                                                                                                                                                      
+    &&   update-ca-certificates   
 
-FROM gcr.io/kaniko-project/executor:v1.9.1-debug
+FROM gcr.io/kaniko-project/executor:v1.7.0-debug
 
 SHELL ["/busybox/sh", "-c"]
 
@@ -18,9 +20,9 @@ RUN wget -O /kaniko/jq \
     rm /crane.tar.gz
 
 COPY entrypoint.sh /
-COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=certs /etc/ssl/certs /etc/ssl/certs
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-LABEL repository="https://github.com/aevea/action-kaniko" \
-    maintainer="Alex Viscreanu <alexviscreanu@gmail.com>"
+LABEL repository="https://github.com/kaplan-shaked/action-kaniko" \
+    maintainer="Kaplan Shaked <kaplan.shaked@gmail.com>"

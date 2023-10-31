@@ -12,6 +12,9 @@ inputs:
   registry:
     description: "Docker registry where the image will be pushed"
     required: false
+  second_registry:
+    description: "additional registry to login into, same credentials will be used"
+    required: false
   username:
     description: "Username used for authentication to the Docker registry"
     required: false
@@ -59,4 +62,4 @@ inputs:
     required: false
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "docker://ghcr.io/kaplan-shaked/action-kaniko:v1.0.0"
