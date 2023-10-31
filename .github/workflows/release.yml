@@ -33,9 +33,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
-        run: |
-         docker buildx create --use
-         docker buildx inspect --bootstrap
-         docker buildx build .  -t ${{ steps.meta.outputs.tags }}} --push
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5.0.0
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          builder: ${{ github.actor }}/builder:latest
 
