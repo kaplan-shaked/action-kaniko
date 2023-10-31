@@ -79,6 +79,23 @@ fi
 
 export ARGS="$CACHE $CONTEXT $DOCKERFILE $TARGET $DESTINATION $INPUT_EXTRA_ARGS"
 
+
+ if [ -z if [ -z "$SECOND_REGISTRY" ]; then
+cat <<EOF >/kaniko/.docker/config.json
+{
+    "auths": {
+        "https://${REGISTRY}": {
+            "username": "${USERNAME}",
+            "password": "${PASSWORD}"
+        },
+        "https://${SECOND_REGISTRY}": {
+            "username": "${USERNAME}",
+            "password": "${PASSWORD}"
+        }
+    }
+}
+EOF
+else 
 cat <<EOF >/kaniko/.docker/config.json
 {
     "auths": {
@@ -86,15 +103,10 @@ cat <<EOF >/kaniko/.docker/config.json
             "username": "${USERNAME}",
             "password": "${PASSWORD}"
         }
-        ${SECOND_REGISTRY+,
-        "https://${SECOND_REGISTRY}": {
-            "username": "${USERNAME}",
-            "password": "${PASSWORD}"
-        }
-        }
     }
 }
 EOF
+fi
 
 # https://github.com/GoogleContainerTools/kaniko/issues/1349
 /kaniko/executor --reproducible --force $ARGS
