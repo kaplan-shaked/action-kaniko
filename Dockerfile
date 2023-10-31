@@ -20,9 +20,9 @@ RUN wget -O /kaniko/jq \
     rm /crane.tar.gz
 
 COPY entrypoint.sh /
-COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=certs /etc/ssl/certs /etc/ssl/certs
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-LABEL repository="https://github.com/aevea/action-kaniko" \
-    maintainer="Alex Viscreanu <alexviscreanu@gmail.com>"
+LABEL repository="https://github.com/kaplan-shaked/action-kaniko" \
+    maintainer="Kaplan Shaked <kaplan.shaked@gmail.com>"
