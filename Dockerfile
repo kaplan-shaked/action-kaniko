@@ -1,6 +1,8 @@
 FROM alpine as certs
 
-RUN apk --update add ca-certificates
+RUN   apk update \                                                                                                                                                                                                                        
+    &&   apk add ca-certificates wget \                                                                                                                                                                                                      
+    &&   update-ca-certificates   
 
 FROM gcr.io/kaniko-project/executor:v1.7.0-debug
 
