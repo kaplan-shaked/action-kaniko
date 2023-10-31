@@ -39,5 +39,4 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          builder: ${{ github.actor }}/builder:latest
 
