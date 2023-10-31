@@ -34,10 +34,8 @@ jobs:
             image=moby/buildkit:v0.11.6            
             network=host
       - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          platforms: linux/arm64
-          push: true                                      
-          tags: ${{ steps.meta.outputs.tags }}
-          allow: "network.host"
+        run: |
+         docker buildx create --use
+         docker buildx inspect --bootstrap
+         docker buildx build .  -t ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.ref }} --push
 
